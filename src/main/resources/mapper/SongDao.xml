@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxb.bgz.dao.SongDao">
+
+    <resultMap id="BaseResultMap" type="com.cxb.bgz.entity.Song">
+        <!--@Table song-->
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="songName" column="song_name" jdbcType="VARCHAR"/>
+        <result property="path" column="path" jdbcType="VARCHAR"/>
+        <result property="image" column="image" jdbcType="VARCHAR"/>
+        <result property="lyric" column="lyric" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="playCount" column="play_count" jdbcType="INTEGER"/>
+        <result property="singerId" column="singer_id" jdbcType="INTEGER"/>
+        <result property="typeId" column="type_id" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="BaseResultMap">
+        select
+          id, song_name, path, image, lyric, create_time, play_count, singer_id, type_id
+        from bgzMusic.bgz_song
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="BaseResultMap">
+        select
+          id, song_name, path, image, lyric, create_time, play_count, singer_id, type_id
+        from bgzMusic.bgz_song
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="BaseResultMap">
+        select
+          id, song_name, path, image, lyric, create_time, play_count, singer_id, type_id
+        from bgzMusic.bgz_song
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="songName != null and songName != ''">
+                and song_name = #{songName}
+            </if>
+            <if test="path != null and path != ''">
+                and path = #{path}
+            </if>
+            <if test="image != null and image != ''">
+                and image = #{image}
+            </if>
+            <if test="lyric != null and lyric != ''">
+                and lyric = #{lyric}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="playCount != null">
+                and play_count = #{playCount}
+            </if>
+            <if test="singerId != null">
+                and singer_id = #{singerId}
+            </if>
+            <if test="typeId != null">
+                and type_id = #{typeId}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into bgzMusic.bgz_song(path, image, lyric)
+        values (#{path}, #{image}, #{lyric})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update bgzMusic.bgz_song
+        <set>
+            <if test="path != null and path != ''">
+                path = #{path},
+            </if>
+            <if test="image != null and image != ''">
+                image = #{image},
+            </if>
+            <if test="lyric != null and lyric != ''">
+                lyric = #{lyric},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from bgzMusic.bgz_song where id = #{id}
+    </delete>
+
+</mapper>

@@ -1,0 +1,37 @@
+#yml的模板文件(使用把其改为application.yml,设置自己的数据库)
+spring:
+  profiles:
+    active: "dev"
+    group:
+      "dev": "dev"
+      "prod": "dev" #用来区别swagger3是否生效
+
+---
+server:
+  port: 8100
+
+spring:
+  config:
+    activate:
+      on-profile: "dev"
+  application:
+    name: bgzMusic
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url:  jdbc:mysql://host:[port]/bgzMusic?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8
+    username: xxx
+    password: xxxxx
+    type: com.alibaba.druid.pool.sDruidDataSource
+    dbcp2:
+      max-wait-millis: 150 #连接超时时间
+      max-total: 5 #最大连接数
+      initial-size: 5 #初始化连接数
+
+#mybatis
+mybatis:
+  mapper-locations: classpath:mapper/*.xml  #映射文件位置
+  configuration:
+    map-underscore-to-camel-case: true  #开启驼峰命名法
+    cache-enabled: true #开启二级缓存，还需要对xml及其对应方法添加开启(二级缓存常用于不经常改动的数据，或改动影响不大)
+  type-aliases-package: com.cxb.bgz.entity  #别名
+

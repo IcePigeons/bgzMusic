@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxb.bgz.dao.SingerDao">
+
+    <resultMap id="BaseResultMap" type="com.cxb.bgz.entity.Singer">
+        <!--@Table singer-->
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="singerName" column="singer_name" jdbcType="VARCHAR"/>
+        <result property="singerInfo" column="singer_info" jdbcType="VARCHAR"/>
+        <result property="birthday" column="birthday" jdbcType="TIMESTAMP"/>
+        <result property="singerSex" column="singer_sex" jdbcType="INTEGER"/>
+        <result property="singerUrl" column="singer_url" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="BaseResultMap">
+        select
+          id, singer_name, singer_info, birthday, singer_sex, singer_url
+        from bgzMusic.bgz_singer
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="BaseResultMap">
+        select
+          id, singer_name, singer_info, birthday, singer_sex, singer_url
+        from bgzMusic.bgz_singer
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="BaseResultMap">
+        select
+          id, singer_name, singer_info, birthday, singer_sex, singer_url
+        from bgzMusic.bgz_singer
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="singerName != null and singerName != ''">
+                and singer_name = #{singerName}
+            </if>
+            <if test="singerInfo != null and singerInfo != ''">
+                and singer_info = #{singerInfo}
+            </if>
+            <if test="birthday != null">
+                and birthday = #{birthday}
+            </if>
+            <if test="singerSex != null">
+                and singer_sex = #{singerSex}
+            </if>
+            <if test="singerUrl != null and singerUrl != ''">
+                and singer_url = #{singerUrl}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into bgzMusic.bgz_singer(birthday)
+        values (#{birthday})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update bgzMusic.bgz_singer
+        <set>
+            <if test="birthday != null">
+                birthday = #{birthday},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from bgzMusic.bgz_singer where id = #{id}
+    </delete>
+
+</mapper>
